@@ -1,0 +1,31 @@
+# 1. files of data base (SQL Server)
+*.mdf
+*.ldf
+*.ndf
+*.bak
+*.tmp
+*.log
+
+# 2. data files (avoid uploading vast files)
+*.csv
+*.tsv
+*.xlsx
+*.json
+*.parquet
+/datasets/
+/data/
+
+# 3. Security
+*.env
+*.config
+secrets.json
+
+# 4. IDE Settings (VS Code, SSMS, etc.)
+.vscode/
+.idea/
+*.suo
+*.user
+
+# 5. Temporery System Files (Windows/Mac)
+.DS_Store
+Thumbs.db
