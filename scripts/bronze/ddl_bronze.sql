@@ -1,13 +1,16 @@
 /*
-==================================================================
-DDL Script: Create Bronze Tables
-==================================================================
+=============================================================
+Create Database and Schemas
+=============================================================
+Script Purpose:
+		This script I create a FormulaDataWarehouse after checking if it exists.
+		If the database already exists I am droping it and then recreating it,
+		also I am creating the schemas 'bronze', 'silver', and 'gold'.
 
-Script Perpose:
-    This Script Create the tables in the bronze schema if they already exist we drop them.
-    Run this if want to redefine your Schema.
-
-WARNING: if you run this you will lose any pre-existing data inside your tables.
+WARNING:
+		Running this script will automatically drop all the existing contents of 
+		the database and recreate new but EMPTY schemas. Be VERY carefull running 
+		this.
 */
 
 if object_id('bronze.drivers', 'U') is not null
@@ -16,7 +19,7 @@ if object_id('bronze.drivers', 'U') is not null
 go
 
 create table bronze.drivers(
-	driverId int,
+	driverId nvarchar(50),
 	driverRef nvarchar(50),
 	number nvarchar(50),
 	code nvarchar(50),
@@ -34,7 +37,7 @@ if object_id('bronze.constructors', 'U') is not null
 go
 
 create table bronze.constructors(
-	constructorId int,
+	constructorId nvarchar(50),
 	constructorRef nvarchar(50),
 	name nvarchar(50),
 	nationality nvarchar(50),
@@ -49,7 +52,7 @@ if object_id('bronze.circuits', 'U') is not null
 go
 
 create table bronze.circuits(
-	circuitId int,
+	circuitId nvarchar(50),
 	circuitRef nvarchar(50),
 	name nvarchar(50),
 	location nvarchar(50),
@@ -57,7 +60,7 @@ create table bronze.circuits(
 	lat nvarchar(50),
 	lng nvarchar(50),
 	alt nvarchar(50),
-	url nvarchar(50)
+	url nvarchar(max)
 )
 
 go
@@ -68,14 +71,14 @@ if object_id('bronze.races', 'U') is not null
 go
 
 create table bronze.races(
-	raceId int,
+	raceId nvarchar(50),
 	year nvarchar(50),
 	round nvarchar(50),
 	circuitId nvarchar(50),
-	name nvarchar(50),
+	name nvarchar(max),
 	date nvarchar(50),
 	time nvarchar(50),
-	url nvarchar(50),
+	url nvarchar(max),
 	fp1_date nvarchar(50),
 	fp1_time nvarchar(50),
 	fp2_date nvarchar(50),
@@ -96,7 +99,7 @@ if object_id('bronze.results', 'U') is not null
 go
 
 create table bronze.results (
-	resultId int,
+	resultId nvarchar(50),
 	raceId nvarchar(50),
 	driverId nvarchar(50),
 	constructorId nvarchar(50),
