@@ -13,7 +13,6 @@ example execution:
     execute silver.load_bronze;
 */
 
-
 truncate table silver.drivers
 
 insert into silver.drivers (
@@ -30,18 +29,18 @@ insert into silver.drivers (
 
 select
 	cast(driverId as int) as driverId,
-	driverRef,
+	trim(replace(driverRef, '"','')) as driverRef,
 	case
 		when number = '\N' then null
 		else cast(number as int)
 	end as number,
 	case
-		when code = '\N' then null
-		else code
+		when trim(replace(code, '"','')) = '\N' then null
+		else trim(replace(code, '"',''))
 	end	as code,
-	forename,
-	surname,
-	cast(dob as date) as dob,
-	nationality,
-	url
+	trim(replace(forename, '"', ''))as forename,
+	trim(replace(surname, '"', '')) as surname,
+	cast(trim(replace(dob, '"', '')) as date) as dob,
+	trim(replace(nationality, '"', '')),
+	trim(replace(url, '"', '')) as url
 from bronze.drivers
