@@ -15,7 +15,7 @@ if object_id('silver.drivers', 'U') is not null
 go
 
 create table silver.drivers(
-	driverId int,
+	driverId int not null primary key,
 	driverRef nvarchar(50),
 	number int,
 	code nvarchar(50),
@@ -23,7 +23,8 @@ create table silver.drivers(
 	surname nvarchar(50),
 	dob date,
 	nationality nvarchar(50),
-	url nvarchar(max)
+	url nvarchar(max),
+	dwh_creation_date datetime2 default getdate()
 );
 go
 
