@@ -1,16 +1,11 @@
 /*
-=============================================================
-Create Database and Schemas
-=============================================================
-Script Purpose:
-		This script I create a FormulaDataWarehouse after checking if it exists.
-		If the database already exists I am droping it and then recreating it,
-		also I am creating the schemas 'bronze', 'silver', and 'gold'.
+==================================================================
+DDL Script: Create Bronze Tables
+==================================================================
 
-WARNING:
-		Running this script will automatically drop all the existing contents of 
-		the database and recreate new but EMPTY schemas. Be VERY carefull running 
-		this.
+Script Perpose:
+    This Script Create the tables in the bronze schema if they already exist we drop them.
+    Run this if want to redefine your Schema
 */
 
 if object_id('bronze.drivers', 'U') is not null
