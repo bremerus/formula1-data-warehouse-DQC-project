@@ -1,6 +1,6 @@
 --testing from bronze to silver
 
---bronze drivers
+													--bronze drivers
 
 --check for duplicates of any column and nulls as " \N "
 select top 100 
@@ -27,16 +27,29 @@ select
 from bronze.drivers
 where len(code) > 3 or code is null
 
+--check for age legitimacy
+select
+	*
+from bronze.drivers
+where cast(dob as date) > '2008-01-01'
 
 
 
 
+													--bronze races
 
+select
+	distinct time
+from bronze.races
 
---bronze races
+-- check for valid year
+select
+	*
+from bronze.races
+where year < 1950
 
-
-
-
-select * from bronze.races
-
+--check for valid round number
+select
+	*
+from bronze.races
+where round <= 0
