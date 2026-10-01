@@ -36,39 +36,27 @@ if object_id('silver.races', 'U') is not null
 go
 
 create table silver.races(
-	raceId int,
-	year int,
-	round nvarchar(50),
-	circuitId nvarchar(50),
+	raceId int not null primary key,
+	year int not null,
+	round int not null,
+	circuitId int not null,
 	name nvarchar(max),
-	date nvarchar(50),
-	time nvarchar(50),
+	date date not null,
+	time time,
 	url nvarchar(max),
-	fp1_date nvarchar(50),
-	fp1_time nvarchar(50),
-	fp2_date nvarchar(50),
-	fp2_time nvarchar(50),
-	fp3_date nvarchar(50),
-	fp3_time nvarchar(50),
-	quali_date nvarchar(50),
-	quali_time nvarchar(50),
-	sprint_date nvarchar(50),
-	sprint_time nvarchar(50)
+	fp1_date date,
+	fp1_time time,
+	fp2_date date,
+	fp2_time time,
+	fp3_date date,
+	fp3_time time,
+	quali_date date,
+	quali_time time,
+	sprint_date date,
+	sprint_time time,
+	dwh_creation_date datetime2 default getdate()
 )
 go
-
-
-
-=============================================================================================================================================================
-=============================================================================================================================================================
-=============================================================================================================================================================
-=============================================================================================================================================================
-
-
-
-
-
-
 
 if object_id('silver.constructors', 'U') is not null
 	drop table silver.constructors;
@@ -76,11 +64,12 @@ if object_id('silver.constructors', 'U') is not null
 go
 
 create table silver.constructors(
-	constructorId nvarchar(50),
+	constructorId int not null primary key,
 	constructorRef nvarchar(50),
-	name nvarchar(50),
-	nationality nvarchar(50),
-	url nvarchar(max)
+	name nvarchar(50) not null,
+	nationality nvarchar(50) not null,
+	url nvarchar(max),
+	dwh_creation_date datetime2 default getdate()
 );
 
 go
@@ -91,18 +80,17 @@ if object_id('silver.circuits', 'U') is not null
 go
 
 create table silver.circuits(
-	circuitId nvarchar(50),
+	circuitId int not null primary key,
 	circuitRef nvarchar(50),
 	name nvarchar(50),
 	location nvarchar(50),
 	country nvarchar(50),
-	lat nvarchar(50),
-	lng nvarchar(50),
-	alt nvarchar(50),
-	url nvarchar(max)
+	lat float,
+	lng float,
+	alt int,
+	url nvarchar(max),
+	dwh_creation_date datetime2 default getdate()
 )
-
-
 
 go
 
@@ -112,22 +100,23 @@ if object_id('silver.results', 'U') is not null
 go
 
 create table silver.results (
-	resultId nvarchar(50),
-	raceId nvarchar(50),
-	driverId nvarchar(50),
-	constructorId nvarchar(50),
-	number nvarchar(50),
-	grid nvarchar(50),
-	position nvarchar(50),
+	resultId int not null primary key,
+	raceId int not null,
+	driverId int not null,
+	constructorId int not null,
+	number int,
+	grid int,
+	position int,
 	positionText nvarchar(50),
-	positionOrder nvarchar(50),
-	points nvarchar(50),
-	laps nvarchar(50),
+	positionOrder int,
+	points float,
+	laps int,
 	time nvarchar(50),
-	milliseconds nvarchar(50),
-	fastestLap nvarchar(50),
-	rank nvarchar(50),
+	milliseconds int,
+	fastestLap int,
+	rank int,
 	fastestLapTime nvarchar(50),
-	fastestLapSpeed nvarchar(50),
-	statusId nvarchar(50)
+	fastestLapSpeed float,
+	statusId int,
+	dwh_creation_date datetime2 default getdate()
 )
