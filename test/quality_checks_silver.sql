@@ -53,3 +53,62 @@ select
 	*
 from bronze.races
 where round <= 0
+
+													--bronze constructors
+
+
+select * from bronze.constructors
+
+select
+	*
+from bronze.constructors
+where constructorId = '\N'
+
+select
+	*
+from bronze.constructors
+where constructorRef != trim(constructorRef)
+
+
+													--bronze circuits
+select * from bronze.circuits
+
+--check for nulls in any field
+select
+	*
+from bronze.circuits
+where name = '\N' or circuitId = '\N' or circuitRef= '\N' or location = '\N' or	country	 = '\N' or lat = '\N' or lng = '\N' or alt= '\N' or	url = '\N' 
+
+
+--check for valid lng and lat values
+select
+	*
+from bronze.circuits
+where not ((cast(lat as float) between -90.0 and 90.0)  or (cast(lng as float) between -189.0 and 180.0) or cast(alt as int) < 3000)
+
+
+														-- bronze results
+select * from bronze.results
+
+select 
+distinct fastestLapSpeed
+from bronze.results
+where fastestLapSpeed = '\N'
+
+select
+	*
+from bronze.results
+where laps < 0 AND grid < 0
+
+select
+	*
+from bronze.results
+where not(case 
+		when fastestLapSpeed = '\N' then null
+		else cast(trim(replace(fastestLapSpeed, '"', '')) as float)
+	end < 265.0)
+
+select
+	distinct fastestLapTime
+from bronze.results
+where fastestLapTime = '\N'
