@@ -268,9 +268,9 @@ begin
 				else cast(trim(replace(rank, '"', '')) as int)
 			end as rank,
 			case 
-				when fastestLapSpeed = '\N' then null
-				else trim(replace(fastestLapSpeed, '"', ''))
-			end as fastestLapSpeed,
+				when fastestLapTime = '\N' then null
+				else trim(replace(fastestLapTime, '"', ''))
+			end as fastestLapTime,
 			case 
 				when fastestLapSpeed = '\N' then null
 				else cast(trim(replace(fastestLapSpeed, '"', '')) as float)
@@ -295,5 +295,7 @@ begin
 			print '==============================='
 		end catch
 end
+
+go
 
 exec silver.load_silver
