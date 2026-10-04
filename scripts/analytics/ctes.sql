@@ -71,3 +71,27 @@ from count_clusters
 where rounds_in_cluster > 1
 group by driverId
 order by sum(rounds_in_cluster) desc
+
+--This query is about the performance of the driver per season
+
+with avg_per_year as (
+	select
+		driverId,
+		race_year,
+		avg(milliseconds) as avg_milisec
+	from gold.fact_results
+	group by race_year,
+		driverId
+	
+)
+
+select
+	*,
+	lag(avg_milisec) over(partition by driverId order by driverId, race_year) prev_year_avg,
+	case
+		when lag(avg_milisec) over(partition by driverId order by driverId, race_year) < avg_milisec then 'Increse'
+		when lag(avg_milisec) over(partition by driverId order by driverId, race_year) > avg_milisec then 'Decrease'
+		else 'first year'
+	end as performance
+from avg_per_year 
+order by driverId
