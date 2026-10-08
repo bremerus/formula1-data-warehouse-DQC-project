@@ -95,3 +95,43 @@ select
 	end as performance
 from avg_per_year 
 order by driverId
+
+
+
+--moving average for position of last 3 races per season
+
+select
+	resultId,
+	raceId,
+	driverId,
+	milliseconds,
+	position,
+	race_date,
+	avg(position) over(partition by driverId order by race_date rows between 2 preceding and current row) as avg_of_last_3
+from gold.fact_results
+order by driverId, race_year
+
+--Top 3 constructors per season
+
+with cte_const_points_season as (
+select
+	constructorId,
+	constructor_name,
+	race_year,
+	sum(points) as total_points
+from gold.fact_results
+group by constructorId,
+	constructor_name,
+	race_year
+), cte_ranks as (
+select 
+	*,
+	dense_rank() over(partition by race_year order by total_points desc) as ranking
+from cte_const_points_season 
+)
+
+select
+	*
+from cte_ranks 
+where ranking <= 3
+
