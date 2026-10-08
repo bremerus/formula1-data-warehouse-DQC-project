@@ -135,3 +135,49 @@ select
 from cte_ranks 
 where ranking <= 3
 
+
+--first victory and number of races until that
+
+with cte_ranks as (
+	select
+		raceId,
+		driverId,
+		race_date,
+		position,
+		row_number() over(partition by driverId order by race_date) as seira_agonwn
+	from gold.fact_results
+), cte_order as (
+select
+	*,
+	ROW_NUMBER() over(partition by driverId order by race_date) as race_order
+from cte_ranks
+where position = 1
+)
+
+select
+	driverId,
+	race_date,
+	seira_agonwn,
+	seira_agonwn - 1 as races_until_1
+from cte_order 
+where race_order = 1
+
+--best point and position difference between 2
+
+with cte_prev as (
+	select
+		driverId,
+		raceId,
+		points,
+		points - lag(points) over(partition by driverId order by race_date) as diff_previous_point,
+		position,
+		position - lag(position) over(partition by driverId order by race_date) as diff_previous_position
+	from gold.fact_results
+)
+
+select
+	driverId,
+	max(diff_previous_point),
+	min(diff_previous_position)
+from cte_prev
+group by driverId
