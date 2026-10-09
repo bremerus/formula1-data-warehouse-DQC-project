@@ -181,3 +181,59 @@ select
 	min(diff_previous_position)
 from cte_prev
 group by driverId
+
+-- percantage of points per season
+
+with cte_points_per_year as (
+	select
+		raceId,
+		driverId,
+		points,
+		race_year,
+		sum(points) over(partition by race_year) total_points_yearly
+	from gold.fact_results
+)
+
+select
+	raceId,
+	driverId,
+	points,
+	total_points_yearly,
+	concat(round((points * 100.0 )/ total_points_yearly, 2), '%') as percentage
+from cte_points_per_year 
+
+--Most succesfull constructor per circuit
+
+with cte_num_1 as (
+	select
+		constructorId,
+		constructor_name,
+		circuit_name,
+		circuit_country,
+		position,
+		COUNT(constructorId) as total_victories_per_circuit
+	from gold.fact_results
+	where position = 1
+	group by constructorId,
+		constructor_name,
+		circuit_name,
+		circuit_country,
+		position
+), ranks as (
+select
+	*,
+	rank() over(partition by circuit_name order by total_victories_per_circuit desc) as ranking_victories
+from cte_num_1
+)
+
+select
+	constructorId,
+		constructor_name,
+		circuit_name,
+		circuit_country,
+		position,
+		total_victories_per_circuit
+from ranks
+where ranking_victories = 1
+
+
