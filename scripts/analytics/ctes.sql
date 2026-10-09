@@ -276,3 +276,27 @@ from cte_rank_size_streaks
 where ranking = 1
 
 
+--4 categories based on their total points
+
+
+with cte_total_points as (
+	select
+		driverId,
+		driverRef,
+		sum(points) as total_points
+	from gold.fact_results
+	group by driverId,
+		driverRef
+)
+
+select
+	driverId,
+	driverRef,
+	total_points,
+	case
+		when total_points < 50 then 'Rookie'
+		when total_points < 100 then 'Mid'
+		when total_points < 200 then 'Great'
+		else 'Elite'
+	end
+from cte_total_points v
