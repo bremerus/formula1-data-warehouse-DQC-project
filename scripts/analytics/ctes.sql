@@ -237,3 +237,42 @@ from ranks
 where ranking_victories = 1
 
 
+--largest winstreak per driver
+
+with cte_race_order as (
+	select
+		driverId,
+		surname,
+		position,
+		race_date,
+		row_number() over(partition by driverId order by race_date) as race_order
+	from gold.fact_results
+), cte_victory_order as (
+	select
+		*,
+		row_number() over(partition by driverId order by race_date) as firsts_order
+	from cte_race_order
+	where position = 1
+), cte_streaks as (
+	select
+		*,
+		race_order - firsts_order as streaks
+	from cte_victory_order
+), cte_size_streak_clusters as (
+	select
+		driverId,
+		count(streaks) as streak_size
+	from cte_streaks
+	group by driverId,streaks
+), cte_rank_size_streaks as (
+	select
+		*,
+		row_number() over(partition by driverId order by streak_size desc) as ranking
+	from cte_size_streak_clusters 
+)
+select
+	*
+from cte_rank_size_streaks
+where ranking = 1
+
+
